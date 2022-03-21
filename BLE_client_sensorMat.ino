@@ -15,6 +15,7 @@ static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-008001DD6C64");
 // The characteristic of the remote service we are interested in.
 static BLEUUID    charUUID("000055C2-0000-1000-8000-008001DD6C64");
 
+
 static boolean doConnect = false;
 static boolean connected = false;
 static boolean doScan = false;
