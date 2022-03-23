@@ -200,14 +200,17 @@ void loop() {
     BLEDevice::getScan()->start(0);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
   }
 
-  if (oldD[13] != newD[13]) {
-    memcpy(newD,oldD,13);
+
+  if (oldD[12] != newD[12]) {
+    //memcpy(newD,oldD,sizeof(newD));
+    oldD[12] = newD[12];
     String dataString = "";
     for (int i = 0; i < 13; i++) {
       dataString += String(newD[i]);
       dataString += " ";
     }
-    File dataFile = SD.open("datalog.txt", FILE_WRITE);
+    //Serial.println(dataString);
+    File dataFile = SD.open("/datalog.txt", FILE_APPEND);
     if (dataFile) {
       dataFile.println(dataString);
       dataFile.close();
