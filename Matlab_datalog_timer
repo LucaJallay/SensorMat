@@ -1,0 +1,10 @@
+a=1;
+time=0;
+
+
+while a<length(datalog(:,1))
+if (sum(datalog(a, 1:12)) > 20)
+time= time + 0.1;
+end
+a=a+1;
+end
