@@ -1,6 +1,7 @@
 i=1;
 standing = 0;
 total_switches=0;
+total_standing_time=0;
 
 while (i<length(text(:, 1)))
    if(text(i, 1)==1)
@@ -9,6 +10,7 @@ while (i<length(text(:, 1)))
        if (standing ~= 0)
           fprintf("Standing time in s: %d\n", standing);
           total_switches=total_switches+1;
+          total_standing_time=total_standing_time+standing;
           standing = 0; 
        end
    end
@@ -16,6 +18,8 @@ while (i<length(text(:, 1)))
 end
 if (text(length(text(:, 1)), 1)==1)
     fprintf("Standing time in s: %d\n", standing);
+    total_standing_time=total_standing_time+standing;
 end
 fprintf("Total changes = %d\n", total_switches)
+fprintf("Total standing time = %d\n", total_standing_time)
     
