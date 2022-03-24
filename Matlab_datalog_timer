@@ -1,10 +1,23 @@
 a=1;
-time=0;
+sitting_time=0;
+changes=0;
+total_sitting_time=0;
 
 
 while a<length(datalog(:,1))
-if (sum(datalog(a, 1:12)) > 20)
-time= time + 0.1;
+if (sum(datalog(a, 1:12)) > 30)
+sitting_time= sitting_time + 1;
+elseif (sitting_time~= 0)
+    changes=changes+1;
+    fprintf("Sitting time in s: %d\n", sitting_time);
+    total_sitting_time=total_sitting_time+sitting_time;
+    sitting_time =0;
 end
 a=a+1;
 end
+if (sum(datalog(length(datalog(:,1)), 1:12)) > 30)
+    fprintf("Sitting time in s: %d\n", sitting_time);
+    total_sitting_time=total_sitting_time+sitting_time;
+end
+fprintf("Total changes: %d\n", changes);
+fprintf("Total sitting time: %d\n", total_sitting_time);
