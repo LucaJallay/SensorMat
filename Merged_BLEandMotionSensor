@@ -23,7 +23,7 @@ int val = 0;
 bool motionState = false; // We start with no motion detected.
 
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-008001dd6c64");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -153,6 +153,11 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 
 
 void setup() {
+  // Configure the pins as input or output:
+  pinMode(ledPin, OUTPUT);
+  pinMode(pirPin, INPUT);
+  // Begin serial communication at a baud rate of 115200:
+  
   Serial.begin(115200);
   Serial.println("Starting Arduino BLE Client application...");
   BLEDevice::init("");
@@ -167,9 +172,9 @@ void setup() {
   pBLEScan->setActiveScan(true);
   pBLEScan->start(5, false);
 
-   // Configure the pins as input or output:
-  pinMode(ledPin, OUTPUT);
-  pinMode(pirPin, INPUT); // worked until here --> continue and change serial.begin(9600)
+   
+  
+   
 
   Serial.print("Initializing SD card...");
   // see if the card is present and can be initialized:
@@ -185,7 +190,37 @@ void setup() {
 
 // This is the Arduino main loop function.
 void loop() {
-
+    // Read out the pirPin and store as val:
+  val = digitalRead(pirPin);
+  Serial.println(val);
+  // If motion is detected (pirPin = HIGH), do the following:
+  if (val == HIGH) {
+    digitalWrite(ledPin, HIGH); // Turn on the on-board LED.
+    // Change the motion state to true (motion detected):
+    if (motionState == false) {
+    //  Serial.println("Motion detected!");
+      motionState = true;
+    }
+  }
+  // If no motion is detected (pirPin = LOW), do the following:
+  else {
+    digitalWrite(ledPin, LOW); // Turn off the on-board LED.
+    // Change the motion state to false (no motion):
+    if (motionState == true) {
+    //  Serial.println("Motion ended!");
+      motionState = false;
+    }
+  }
+   File dataFile = SD.open("/text.txt", FILE_APPEND);
+   if (dataFile) {
+      dataFile.println(val);
+      dataFile.close();
+      // print to the serial port too:
+      Serial.println(val);
+    }
+    else {
+      Serial.println("error opening text.txt");
+    }
   // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
   // connected we set the connected flag to be true.
@@ -224,14 +259,15 @@ void loop() {
     File dataFile = SD.open("/datalog.txt", FILE_APPEND);
     if (dataFile) {
       dataFile.println(dataString);
+      Serial.println(dataString);
       dataFile.close();
       // print to the serial port too:
-      Serial.println(dataString);
+      
     }
     else {
       Serial.println("error opening datalog.txt");
     }
   }
 
-  delay(100); // Delay a second between loops.
+  delay(10); // Delay 1/10 second between loops.
 } // End of loop
