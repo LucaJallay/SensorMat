@@ -16,7 +16,7 @@ uint8_t oldD[13];
 uint8_t newD[13];
 
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-008001dd6c64");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -203,6 +203,7 @@ void loop() {
 
   if (oldD[12] != newD[12]) {
     //memcpy(newD,oldD,sizeof(newD));
+    //Serial.println("Here1");
     oldD[12] = newD[12];
     String dataString = "";
     for (int i = 0; i < 13; i++) {
@@ -212,15 +213,17 @@ void loop() {
     //Serial.println(dataString);
     File dataFile = SD.open("/datalog.txt", FILE_APPEND);
     if (dataFile) {
+      //Serial.println("Here2");
       dataFile.println(dataString);
+      Serial.println(dataString);
       dataFile.close();
       // print to the serial port too:
-      Serial.println(dataString);
+      
     }
     else {
       Serial.println("error opening datalog.txt");
     }
   }
 
-  delay(100); // Delay a second between loops.
+  delay(10); // Delay 1/10 second between loops.
 } // End of loop
