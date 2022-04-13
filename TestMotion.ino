@@ -11,6 +11,7 @@ uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
 #define ledPin 13
 // Create variables:
 int val = 0;
+int mytime=0;
 bool motionState = false; // We start with no motion detected.
 void setup() {
   // Configure the pins as input or output:
@@ -31,7 +32,7 @@ void setup() {
 void loop() {
   // Read out the pirPin and store as val:
   val = digitalRead(pirPin);
-  Serial.println(val);
+  
   // If motion is detected (pirPin = HIGH), do the following:
   if (val == HIGH) {
     digitalWrite(ledPin, HIGH); // Turn on the on-board LED.
@@ -55,10 +56,13 @@ void loop() {
       dataFile.println(val);
       dataFile.close();
       // print to the serial port too:
-      Serial.println(val);
+      Serial.print(val);
+      Serial.print(" ");
+      mytime += 1;
+      Serial.println(mytime);
     }
     else {
       Serial.println("error opening text.txt");
     }
-  delay(1000);
+  delay(100); // delay 1 second
 }
