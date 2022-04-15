@@ -15,12 +15,12 @@ uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
 uint8_t oldD[13];
 uint8_t newD[13];
 
-// Define connection pins MotionSensor:
-#define pirPin 26
-#define ledPin 13
-// Create variables:
-int val = 0;
-bool motionState = false; // We start with no motion detected.
+//millis
+const unsigned long eventInterval = 1000;
+unsigned long previousTime = 0;
+
+unsigned long previousTime2 = 500;
+
 
 // The remote service we wish to connect to.
 static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
@@ -36,6 +36,14 @@ static BLERemoteCharacteristic* pRemoteCharacteristic;
 static BLEAdvertisedDevice* myDevice;
 
 uint8_t sensorvalues[13];
+
+// Define connection pins:
+#define pirPin 26
+#define ledPin 13
+// Create variables:
+int val = 0;
+int mytime=0;
+bool motionState = false; // We start with no motion detected.
 
 static void notifyCallback(
   BLERemoteCharacteristic* pBLERemoteCharacteristic,
@@ -59,6 +67,7 @@ static void notifyCallback(
   //    byte * i;
   //    for (i=(byte*)pData; *i; i++) {
   //}
+  
   for (int c = 0; c < 13; c++) {
     //Serial.println(*(pData+c));
     sensorvalues[c] = *(pData + c);
@@ -156,8 +165,6 @@ void setup() {
   // Configure the pins as input or output:
   pinMode(ledPin, OUTPUT);
   pinMode(pirPin, INPUT);
-  // Begin serial communication at a baud rate of 115200:
-  
   Serial.begin(115200);
   Serial.println("Starting Arduino BLE Client application...");
   BLEDevice::init("");
@@ -171,10 +178,6 @@ void setup() {
   pBLEScan->setWindow(449);
   pBLEScan->setActiveScan(true);
   pBLEScan->start(5, false);
-
-   
-  
-   
 
   Serial.print("Initializing SD card...");
   // see if the card is present and can be initialized:
@@ -190,38 +193,10 @@ void setup() {
 
 // This is the Arduino main loop function.
 void loop() {
-    // Read out the pirPin and store as val:
-  val = digitalRead(pirPin);
-  Serial.println(val);
-  // If motion is detected (pirPin = HIGH), do the following:
-  if (val == HIGH) {
-    digitalWrite(ledPin, HIGH); // Turn on the on-board LED.
-    // Change the motion state to true (motion detected):
-    if (motionState == false) {
-    //  Serial.println("Motion detected!");
-      motionState = true;
-    }
-  }
-  // If no motion is detected (pirPin = LOW), do the following:
-  else {
-    digitalWrite(ledPin, LOW); // Turn off the on-board LED.
-    // Change the motion state to false (no motion):
-    if (motionState == true) {
-    //  Serial.println("Motion ended!");
-      motionState = false;
-    }
-  }
-   File dataFile = SD.open("/text.txt", FILE_APPEND);
-   if (dataFile) {
-      dataFile.println(val);
-      dataFile.close();
-      // print to the serial port too:
-      Serial.println(val);
-    }
-    else {
-      Serial.println("error opening text.txt");
-    }
-  // If the flag "doConnect" is true then we have scanned for and found the desired
+  unsigned long currentTime = millis();
+
+  if(currentTime-previousTime2 >= eventInterval){
+   // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
   // connected we set the connected flag to be true.
   if (doConnect == true) {
@@ -232,6 +207,10 @@ void loop() {
     }
     doConnect = false;
   }
+  else{
+    Serial.println("Here");
+  }
+
 
   // If we are connected to a peer BLE Server, update the characteristic each time we are reached
   // with the current time since boot.
@@ -249,6 +228,7 @@ void loop() {
 
   if (oldD[12] != newD[12]) {
     //memcpy(newD,oldD,sizeof(newD));
+    //Serial.println("Here1");
     oldD[12] = newD[12];
     String dataString = "";
     for (int i = 0; i < 13; i++) {
@@ -258,6 +238,7 @@ void loop() {
     //Serial.println(dataString);
     File dataFile = SD.open("/datalog.txt", FILE_APPEND);
     if (dataFile) {
+      //Serial.println("Here2");
       dataFile.println(dataString);
       Serial.println(dataString);
       dataFile.close();
@@ -269,5 +250,7 @@ void loop() {
     }
   }
 
-  delay(10); // Delay 1/10 second between loops.
-} // End of loop
+    previousTime2 = currentTime;
+  }
+
+  
