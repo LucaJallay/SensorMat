@@ -5,6 +5,7 @@
 
 const int chipSelect = 14;
 uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
+int previousTime= 0;
 
 // Define connection pins:
 #define pirPin 26
@@ -30,7 +31,10 @@ void setup() {
 
 }
 void loop() {
-  // Read out the pirPin and store as val:
+  //Serial.println(millis());
+  if(millis()-previousTime >=1000){
+    previousTime=millis();
+    // Read out the pirPin and store as val:
   val = digitalRead(pirPin);
   
   // If motion is detected (pirPin = HIGH), do the following:
@@ -64,5 +68,8 @@ void loop() {
     else {
       Serial.println("error opening text.txt");
     }
-  delay(100); // delay 1 second
+    
+  //delay(100); // delay 1 second
+  }
+  
 }
