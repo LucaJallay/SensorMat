@@ -12,6 +12,7 @@
 
 int previousTime1= 0;
 int previousTime2= 1000;
+int timer = 0;
 const int chipSelect = 14;
 uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
 uint8_t oldD[13];
@@ -219,10 +220,13 @@ void loop() {
     //Serial.println("Here1");
     oldD[12] = newD[12];
     String dataString = "";
-    for (int i = 0; i < 13; i++) {
+    for (int i = 0; i < 12; i++) {
       dataString += String(newD[i]);
       dataString += " ";
     }
+    timer = timer+2;
+    dataString += String(timer);
+    dataString += " ";
     //Serial.println(dataString);
     File dataFile = SD.open("/datalog.txt", FILE_APPEND);
     if (dataFile) {
