@@ -1,0 +1,240 @@
+clear all
+close all
+clc
+set_path
+
+
+
+data1 = importdata('kalib1.csv',',',2);
+data2 = importdata('kalib2.csv',',',2);
+data3 = importdata('kalib3.csv',',',2);
+data4 = importdata('kalib4.csv',',',2);
+data5 = importdata('kalib5.csv',',',2);
+data6 = importdata('kalib_preload_1.csv',',',2);
+data7 = importdata('kalib_preload_2.csv',',',2);
+data8 = importdata('kalib_preload_3.csv',',',2);
+
+s = size(data1,1);
+data1=data1.data;
+data2=data2.data;
+data3=data3.data;
+data4=data4.data;
+data5=data5.data;
+data6=data6.data;
+data7=data7.data;
+data8=data8.data;
+
+
+
+
+y = [2, 3, 5, 7, 10, 15, 20, 30, 45, 60];
+
+x11 = data1(288:450:end, 1); 
+x12 = data2(288:450:end,1); 
+x13 = data3(288:450:end,1);
+x14 = data4(288:450:end,1);
+x15 = data5(288:450:end,1);
+x16 = data6(2920:447:(end-380), 1);
+x17 = data7(2827:450:end, 1);
+x18 = data8(2920:447:(end-380), 1);
+
+subplot(3,2,1)
+scatter(x11, y, 'x')
+hold on
+scatter(x12, y, 'x')
+hold on
+scatter(x13, y, 'x')
+hold on
+scatter(x14, y, 'x')
+hold on
+scatter(x15, y, 'x')
+hold on
+scatter(x16, y, 'red')
+hold on
+scatter(x17, y, 'blue')
+hold on
+scatter(x18, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Round 9')
+p1=polyfit((x11+x12+x13+x14+x15)/5, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+
+hold off
+
+x21 = data1(288:450:end, 2); 
+x22 = data2(288:450:end,2); 
+x23 = data3(288:450:end,2);
+x24 = data4(288:450:end,2);
+x25 = data5(288:450:end,2);
+x26 = data6(2920:447:(end-380), 2);
+x27 = data7(2827:450:end, 2);
+x28 = data8(2920:447:(end-380), 2);
+
+
+subplot(3,2,2)
+scatter(x21, y, 'x')
+hold on
+scatter(x22, y, 'x')
+hold on
+scatter(x23, y, 'x')
+hold on
+scatter(x24, y, 'x')
+hold on
+scatter(x25, y, 'x')
+hold on
+scatter(x26, y, 'red')
+hold on
+scatter(x27, y, 'blue')
+hold on
+scatter(x28, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Round 16')
+p2=polyfit((x21+x22+x23+x24+x25)/5, y, 3);
+plot(0:255, polyval(p2, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x31 = data1(288:450:end, 3); 
+x32 = data2(288:450:end,3); 
+x33 = data3(288:450:end,3);
+x34 = data4(288:450:end,3);
+x35 = data5(288:450:end,3);
+x36 = data6(2920:447:(end-380), 3);
+x37 = data7(2827:450:end, 3);
+x38 = data8(2920:447:(end-380), 3);
+
+
+subplot(3,2,3)
+scatter(x31, y, 'x')
+hold on
+scatter(x32, y, 'x')
+hold on
+scatter(x33, y, 'x')
+hold on
+scatter(x34, y, 'x')
+hold on
+scatter(x35, y, 'x')
+hold on
+scatter(x36, y, 'red')
+hold on
+scatter(x37, y, 'blue')
+hold on
+scatter(x38, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Normal Round')
+p3=polyfit((x31+x32+x33+x34+x35)/5, y, 3);
+plot(0:255, polyval(p3, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x41 = data1(288:450:end, 4); 
+x42 = data2(288:450:end,4); 
+x43 = data3(288:450:end,4);
+x44 = data4(288:450:end,4);
+x45 = data5(288:450:end,4);
+x46 = data6(2920:447:(end-380), 4);
+x47 = data7(2827:450:end, 4);
+x48 = data8(2920:447:(end-380), 4);
+
+
+subplot(3,2,4)
+scatter(x41, y, 'x')
+hold on
+scatter(x42, y, 'x')
+hold on
+scatter(x43, y, 'x')
+hold on
+scatter(x44, y, 'x')
+hold on
+scatter(x45, y, 'x')
+hold on
+scatter(x46, y, 'red')
+hold on
+scatter(x47, y, 'blue')
+hold on
+scatter(x48, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Normal Round')
+p4=polyfit((x41+x42+x43+x44+x45)/5, y, 3);
+plot(0:255, polyval(p4, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x51 = data1(288:450:end, 9); 
+x52 = data2(288:450:end,9); 
+x53 = data3(288:450:end, 9);
+x54 = data4(288:450:end,9);
+x55 = data5(288:450:end,9);
+x56 = data6(2920:447:(end-380), 9);
+x57 = data7(2827:450:end, 9);
+x58 = data8(2920:447:(end-380), 9);
+
+
+subplot(3,2,5)
+scatter(x51, y, 'x')
+hold on
+scatter(x52, y, 'x')
+hold on
+scatter(x53, y, 'x')
+hold on
+scatter(x54, y, 'x')
+hold on
+scatter(x55, y, 'x')
+hold on
+scatter(x56, y, 'red')
+hold on
+scatter(x57, y, 'blue')
+hold on
+scatter(x58, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Square Sensor')
+p5=polyfit((x51+x52+x53+x54+x55)/5, y, 3);
+plot(0:255, polyval(p5, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x61 = data1(288:450:end, 10); 
+x62 = data2(288:450:end,10); 
+x63 = data3(288:450:end, 10);
+x64 = data4(288:450:end,10);
+x65 = data5(288:450:end,10);
+x66 = data6(2920:447:(end-380), 10);
+x67 = data7(2827:450:end, 10);
+x68 = data8(2920:447:(end-380), 10);
+
+
+subplot(3,2,6)
+scatter(x61, y, 'x')
+hold on
+scatter(x62, y, 'x')
+hold on
+scatter(x63, y, 'x')
+hold on
+scatter(x64, y, 'x')
+hold on
+scatter(x65, y, 'x')
+hold on
+scatter(x66, y, 'red')
+hold on
+scatter(x67, y, 'blue')
+hold on
+scatter(x68, y, 'green')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Square Sensor')
+p6=polyfit((x61+x62+x63+x64+x65)/5,y , 3);
+plot(0:255, polyval(p6, 0:255));
+axis([0 255 0 70]);
+hold off
