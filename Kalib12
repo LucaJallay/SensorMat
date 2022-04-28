@@ -1,0 +1,245 @@
+clear all
+close all
+clc
+set_path
+
+
+
+data1 = importdata('kalib_12sensors_2022-04-26 16-27-27-126.csv',',',2);
+data2 = importdata('kalib_12sensors_2022-04-26 16-31-55-896.csv',',',2);
+data3 = importdata('kalib_12sensors_2022-04-26 16-36-14-800.csv',',',2);
+
+data1=data1.data;
+data2=data2.data;
+data3=data3.data;
+
+y = [2, 3, 5, 7, 10, 15, 20, 30, 45, 60];
+
+x31 = data1(273:450:end, 1); 
+x32 = data2(273:450:end,1); 
+x33 = data3(273:450:end,1);
+
+subplot(4,3,1)
+scatter(x31, y, 'x')
+hold on
+scatter(x32, y, 'x')
+hold on
+scatter(x33, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 1')
+p1=polyfix((x31+x32+x33)/3, y, 3, 500, 100);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x31 = data1(273:450:end, 2); 
+x32 = data2(273:450:end,2); 
+x33 = data3(273:450:end,2);
+
+subplot(4,3,2)
+scatter(x31, y, 'x')
+hold on
+scatter(x32, y, 'x')
+hold on
+scatter(x33, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 2')
+p1=polyfit((x31+x32+x33)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x31 = data1(273:450:end, 3); 
+x32 = data2(273:450:end,3); 
+x33 = data3(273:450:end,3);
+
+subplot(4,3,3)
+scatter(x31, y, 'x')
+hold on
+scatter(x32, y, 'x')
+hold on
+scatter(x33, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 3')
+p1=polyfix((x31+x32+x33)/3, y, 3, 15, 0);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x41 = data1(273:450:end, 4); 
+x42 = data2(273:450:end,4); 
+x43 = data3(273:450:end,4);
+
+subplot(4,3,4)
+scatter(x41, y, 'x')
+hold on
+scatter(x42, y, 'x')
+hold on
+scatter(x43, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 4')
+p1=polyfit((x41+x42+x43)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x61 = data1(273:450:end, 5); 
+x62 = data2(273:450:end,5); 
+x63 = data3(273:450:end,5);
+
+subplot(4,3,5)
+scatter(x61, y, 'x')
+hold on
+scatter(x62, y, 'x')
+hold on
+scatter(x63, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 5')
+p1=polyfit((x61+x62+x63)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x61 = data1(273:450:end, 6); 
+x62 = data2(273:450:end,6); 
+x63 = data3(273:450:end,6);
+
+subplot(4,3,6)
+scatter(x61, y, 'x')
+hold on
+scatter(x62, y, 'x')
+hold on
+scatter(x63, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 6')
+p1=polyfix((x61+x62+x63)/3, y, 3, 15, 0);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x71 = data1(273:450:end, 7); 
+x72 = data2(273:450:end,7); 
+x73 = data3(273:450:end,7);
+
+subplot(4,3,7)
+scatter(x71, y, 'x')
+hold on
+scatter(x72, y, 'x')
+hold on
+scatter(x73, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 7')
+p1=polyfit((x71+x72+x73)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x81 = data1(273:450:end, 8); 
+x82 = data2(273:450:end,8); 
+x83 = data3(273:450:end,8);
+
+subplot(4,3,8)
+scatter(x81, y, 'x')
+hold on
+scatter(x82, y, 'x')
+hold on
+scatter(x83, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 8')
+p1=polyfit((x81+x82+x83)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x91 = data1(273:450:end, 9); 
+x92 = data2(273:450:end,9); 
+x93 = data3(273:450:end,9);
+
+subplot(4,3,9)
+scatter(x91, y, 'x')
+hold on
+scatter(x92, y, 'x')
+hold on
+scatter(x93, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 9')
+p1=polyfit((x91+x92+x93)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x101 = data1(273:450:end, 10); 
+x102 = data2(273:450:end,10); 
+x103 = data3(273:450:end,10);
+
+subplot(4,3,10)
+scatter(x101, y, 'x')
+hold on
+scatter(x102, y, 'x')
+hold on
+scatter(x103, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 10')
+p1=polyfit((x101+x102+x103)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x111 = data1(273:450:end, 11); 
+x112 = data2(273:450:end,11); 
+x113 = data3(273:450:end,11);
+
+subplot(4,3,11)
+scatter(x111, y, 'x')
+hold on
+scatter(x112, y, 'x')
+hold on
+scatter(x113, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 11')
+p1=polyfit((x111+x112+x113)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
+x121 = data1(273:450:end, 12); 
+x122 = data2(273:450:end,12); 
+x123 = data3(273:450:end,12);
+
+subplot(4,3,12)
+scatter(x121, y, 'x')
+hold on
+scatter(x122, y, 'x')
+hold on
+scatter(x123, y, 'x')
+xlabel('raw data')
+ylabel('kPa')
+legend
+title('Sensor 12')
+p1=polyfit((x121+x122+x123)/3, y, 3);
+plot(0:255, polyval(p1, 0:255));
+axis([0 255 0 70]);
+hold off
+
