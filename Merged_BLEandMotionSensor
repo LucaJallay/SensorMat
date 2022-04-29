@@ -26,7 +26,7 @@ int mytime=0;
 bool motionState = false; // We start with no motion detected.
 
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-008001DD6C64");
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -45,11 +45,11 @@ static void notifyCallback(
   uint8_t* pData,
   size_t length,
   bool isNotify) {
-  Serial.print("Notify callback for characteristic ");
-  Serial.print(pBLERemoteCharacteristic->getUUID().toString().c_str());
-  Serial.print(" of data length ");
-  Serial.println(length);
-  Serial.print("data: ");
+  //Serial.print("Notify callback for characteristic ");
+  //Serial.print(pBLERemoteCharacteristic->getUUID().toString().c_str());
+//  Serial.print(" of data length ");
+//  Serial.println(length);
+//  Serial.print("data: ");
   //int arrayDATA[]=(char*)pData
   //uint8_t test[]=&pData;
   //Serial.println((char*)pData);
@@ -65,11 +65,11 @@ static void notifyCallback(
   for (int c = 0; c < 13; c++) {
     //Serial.println(*(pData+c));
     sensorvalues[c] = *(pData + c);
-    Serial.print(sensorvalues[c]);
-    Serial.print(',');
+//    Serial.print(sensorvalues[c]);
+//    Serial.print(',');
     newD[c] = sensorvalues[c];
   }
-  Serial.println(' ');
+//  Serial.println(' ');
   //Serial.println(test[0]);
 
 }
@@ -187,7 +187,9 @@ void setup() {
 
 // This is the Arduino main loop function.
 void loop() {
+  
   if(millis()-previousTime1 >= 2000){
+    timer = timer+2; //Sensor mat timer
     previousTime1=millis();
      // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
@@ -224,7 +226,7 @@ void loop() {
       dataString += String(newD[i]);
       dataString += " ";
     }
-    timer = timer+2;
+    
     dataString += String(timer);
     dataString += " ";
     //Serial.println(dataString);
@@ -256,22 +258,11 @@ void loop() {
     //  Serial.println("Motion detected!");
       motionState = true;
     }
-  }
-  // If no motion is detected (pirPin = LOW), do the following:
-  else {
-    digitalWrite(ledPin, LOW); // Turn off the on-board LED.
-    // Change the motion state to false (no motion):
-    if (motionState == true) {
-    //  Serial.println("Motion ended!");
-      motionState = false;
-    }
-  }
-   File dataFile = SD.open("/text.txt", FILE_APPEND);
+    File dataFile = SD.open("/text.txt", FILE_APPEND);
    if (dataFile) {
       // print to the serial port too:
       Serial.print(val);
       Serial.print(" ");
-      mytime += 2;
       Serial.println(mytime);
       //value = str(val, " ", mytime);
       dataFile.print(val);
@@ -282,7 +273,18 @@ void loop() {
     else {
       Serial.println("error opening text.txt");
     }
-
+  }
+  // If no motion is detected (pirPin = LOW), do the following:
+  else {
+    digitalWrite(ledPin, LOW); // Turn off the on-board LED.
+    // Change the motion state to false (no motion):
+    if (motionState == true) {
+    //  Serial.println("Motion ended!");
+      motionState = false;
+    }
+  }
+   
+  mytime += 2;
   //delay(10); // Delay 1/10 second between loops.
 } // End of loop
 }
