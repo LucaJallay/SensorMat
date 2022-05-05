@@ -12,7 +12,7 @@
 
 int previousTime1= 0;
 int previousTime2= 1000;
-int timer = 0;
+
 const int chipSelect = 14;
 uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
 uint8_t oldD[13];
@@ -85,6 +85,7 @@ class MyClientCallback : public BLEClientCallbacks {
 };
 
 bool connectToServer() {
+  mytime+=2;
   Serial.print("Forming a connection to ");
   Serial.println(myDevice->getAddress().toString().c_str());
 
@@ -189,7 +190,6 @@ void setup() {
 void loop() {
   
   if(millis()-previousTime1 >= 2000){
-    timer = timer+2; //Sensor mat timer
     previousTime1=millis();
      // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
@@ -203,6 +203,7 @@ void loop() {
     doConnect = false;
   }
 
+
   // If we are connected to a peer BLE Server, update the characteristic each time we are reached
   // with the current time since boot.
   if (connected) {
@@ -213,8 +214,12 @@ void loop() {
     pRemoteCharacteristic->writeValue(newValue.c_str(), newValue.length());
 
   } else if (doScan) {
+    
+    
     BLEDevice::getScan()->start(0);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
+    
   }
+ 
 
 
   if (oldD[12] != newD[12]) {
@@ -226,8 +231,8 @@ void loop() {
       dataString += String(newD[i]);
       dataString += " ";
     }
-    
-    dataString += String(timer);
+    mytime=(previousTime1/1000);
+    dataString += String(mytime);
     dataString += " ";
     //Serial.println(dataString);
     File dataFile = SD.open("/datalog.txt", FILE_APPEND);
@@ -284,7 +289,6 @@ void loop() {
     }
   }
    
-  mytime += 2;
   //delay(10); // Delay 1/10 second between loops.
 } // End of loop
 }
