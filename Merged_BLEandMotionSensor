@@ -11,12 +11,11 @@
 #include <SD.h>
 
 int previousTime1= 0;
-int previousTime2= 1000;
 
 const int chipSelect = 14;
 uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
-uint8_t oldD[13];
-uint8_t newD[13];
+uint8_t oldD[14];
+uint8_t newD[14];
 
 #define pirPin 26
 #define ledPin 13
@@ -26,7 +25,7 @@ int mytime=0;
 bool motionState = false; // We start with no motion detected.
 
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-008001DD6C64");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -85,7 +84,6 @@ class MyClientCallback : public BLEClientCallbacks {
 };
 
 bool connectToServer() {
-  mytime+=2;
   Serial.print("Forming a connection to ");
   Serial.println(myDevice->getAddress().toString().c_str());
 
@@ -100,7 +98,7 @@ bool connectToServer() {
 
   // Obtain a reference to the service we are after in the remote BLE server.
   BLERemoteService* pRemoteService = pClient->getService(serviceUUIDConnect);
-  if (pRemoteService == nullptr) {
+  if (pRemoteService == 0) {
     Serial.print("Failed to find our service UUID: ");
     Serial.println(serviceUUID.toString().c_str());
     pClient->disconnect();
@@ -189,7 +187,7 @@ void setup() {
 // This is the Arduino main loop function.
 void loop() {
   
-  if(millis()-previousTime1 >= 2000){
+  if(millis()-previousTime1 >= 1000){
     previousTime1=millis();
      // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
@@ -215,48 +213,31 @@ void loop() {
 
   } else if (doScan) {
     
-    
-    BLEDevice::getScan()->start(0);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
-    
+      BLEDevice::getScan()->start(1);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
+
   }
  
 
 
-  if (oldD[12] != newD[12]) {
+
     //memcpy(newD,oldD,sizeof(newD));
     //Serial.println("Here1");
-    oldD[12] = newD[12];
+    oldD[13] = newD[13];
     String dataString = "";
     for (int i = 0; i < 12; i++) {
       dataString += String(newD[i]);
       dataString += " ";
     }
     mytime=(previousTime1/1000);
-    dataString += String(mytime);
-    dataString += " ";
-    //Serial.println(dataString);
-    File dataFile = SD.open("/datalog.txt", FILE_APPEND);
-    if (dataFile) {
-      //Serial.println("Here2");
-      dataFile.println(dataString);
-      Serial.println(dataString);
-      dataFile.close();
-      // print to the serial port too:
-      
-    }
-    else {
-      Serial.println("error opening datalog.txt");
-    }
-  }
-  }
 
- if(millis()-previousTime2 >=2000){
-    previousTime2=millis();
+    //Serial.println(dataString);
+
+  
+  
     // Read out the pirPin and store as val:
   val = digitalRead(pirPin);
   
   // If motion is detected (pirPin = HIGH), do the following:
-  if (val == HIGH) {
     digitalWrite(ledPin, HIGH); // Turn on the on-board LED.
     // Change the motion state to true (motion detected):
     if (motionState == false) {
@@ -264,31 +245,27 @@ void loop() {
       motionState = true;
     }
     File dataFile = SD.open("/text.txt", FILE_APPEND);
+    dataString+= String(val);
+    dataString += " ";
+    dataString+= String(mytime);
    if (dataFile) {
       // print to the serial port too:
-      Serial.print(val);
-      Serial.print(" ");
-      Serial.println(mytime);
-      //value = str(val, " ", mytime);
-      dataFile.print(val);
-      dataFile.print(" ");
-      dataFile.println(mytime);
+      Serial.println(dataString);
+      dataFile.print(dataString);
       dataFile.close();
     }
     else {
       Serial.println("error opening text.txt");
     }
-  }
+
   // If no motion is detected (pirPin = LOW), do the following:
-  else {
     digitalWrite(ledPin, LOW); // Turn off the on-board LED.
     // Change the motion state to false (no motion):
     if (motionState == true) {
     //  Serial.println("Motion ended!");
       motionState = false;
     }
-  }
-   
+
   //delay(10); // Delay 1/10 second between loops.
 } // End of loop
 }
