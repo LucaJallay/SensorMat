@@ -180,7 +180,6 @@ void setup() {
     while (1);
   }
   Serial.println("card initialized.");
-
 } // End of setup.
 
 
@@ -212,9 +211,9 @@ void loop() {
     pRemoteCharacteristic->writeValue(newValue.c_str(), newValue.length());
 
   } else if (doScan) {
-    
       BLEDevice::getScan()->start(1);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
-
+      
+   
   }
  
 
@@ -222,11 +221,21 @@ void loop() {
 
     //memcpy(newD,oldD,sizeof(newD));
     //Serial.println("Here1");
-    oldD[13] = newD[13];
+    int sum =0;
     String dataString = "";
+    if (connected){
+    oldD[13] = newD[13];
     for (int i = 0; i < 12; i++) {
       dataString += String(newD[i]);
+      sum += newD[i];
       dataString += " ";
+    }
+    }
+    else{
+      for (int i = 0; i < 12; i++) {
+        dataString += String(0);
+        dataString += " ";
+      }
     }
     mytime=(previousTime1/1000);
 
@@ -247,16 +256,21 @@ void loop() {
     File dataFile = SD.open("/text.txt", FILE_APPEND);
     dataString+= String(val);
     dataString += " ";
+
     dataString+= String(mytime);
-   if (dataFile) {
-      // print to the serial port too:
-      Serial.println(dataString);
-      dataFile.print(dataString);
-      dataFile.close();
+    if((sum>80) or (val== 1)){
+     if (dataFile) {
+        // print to the serial port too:
+        Serial.println(dataString);
+        dataFile.print(dataString);
+        dataFile.close();
+      }
+      else {
+        Serial.println("error opening text.txt");
+      }
     }
-    else {
-      Serial.println("error opening text.txt");
-    }
+    
+
 
   // If no motion is detected (pirPin = LOW), do the following:
     digitalWrite(ledPin, LOW); // Turn off the on-board LED.
