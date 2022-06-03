@@ -35,7 +35,7 @@ hold on
 scatter(data(:, 14), 3*standing(:, 1),'x', 'g');
 xlabel('Time in s');
 hold off
-
+ 
 
 
 
