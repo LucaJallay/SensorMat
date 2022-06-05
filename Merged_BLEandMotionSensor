@@ -24,8 +24,16 @@ int val = 0;
 int mytime=0;
 bool motionState = false; // We start with no motion detected.
 
+
+//static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
+//
+//static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
+//// The characteristic of the remote service we are interested in.
+//static BLEUUID    charUUID("000055C2-0000-1000-8000-00805F9B34FB");
+
+
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-00804FE209DD");
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -180,6 +188,7 @@ void setup() {
     while (1);
   }
   Serial.println("card initialized.");
+  connectToServer();
 } // End of setup.
 
 
@@ -212,7 +221,6 @@ void loop() {
 
   } else if (doScan) {
       BLEDevice::getScan()->start(1);  // this is just example to start scan after disconnect, most likely there is better way to do it in arduino
-      
    
   }
  
@@ -258,11 +266,11 @@ void loop() {
     dataString += " ";
 
     dataString+= String(mytime);
-    if((sum>80) or (val== 1)){
+    if((sum>20) or (val== 1)){
      if (dataFile) {
         // print to the serial port too:
         Serial.println(dataString);
-        dataFile.print(dataString);
+        dataFile.println(dataString);
         dataFile.close();
       }
       else {
