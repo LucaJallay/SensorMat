@@ -17,7 +17,7 @@ uint16_t manufac[6] = {0xCC, 0xCC, 0xCC, 0x0A, 0x39, 0x8F};
 uint8_t oldD[14];
 uint8_t newD[14];
 
-#define pirPin 26
+#define pirPin 25
 #define ledPin 13
 // Create variables:
 int val = 0;
@@ -25,7 +25,7 @@ int mytime=0;
 bool motionState = false; // We start with no motion detected.
 
 
-//static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");
+//static BLEUUID serviceUUID("000055C0-0000-1000-8000-00802EC611CD");               
 //
 //static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 //// The characteristic of the remote service we are interested in.
@@ -33,7 +33,7 @@ bool motionState = false; // We start with no motion detected.
 
 
 // The remote service we wish to connect to.
-static BLEUUID serviceUUID("000055C0-0000-1000-8000-00804FE209DD");
+static BLEUUID serviceUUID("000055C0-0000-1000-8000-00804FE209DD");           //The 8 last digits have to be changed to connect to another sensor mat
 
 static BLEUUID serviceUUIDConnect("000055C0-0000-1000-8000-00805F9B34FB");
 // The characteristic of the remote service we are interested in.
@@ -195,7 +195,7 @@ void setup() {
 // This is the Arduino main loop function.
 void loop() {
   
-  if(millis()-previousTime1 >= 1000){
+  if(millis()-previousTime1 >= 1000){                                                       //new iteration every second
     previousTime1=millis();
      // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
@@ -266,7 +266,7 @@ void loop() {
     dataString += " ";
 
     dataString+= String(mytime);
-    if((sum>20) or (val== 1)){
+    if((sum>20) or (val== 1)){              //sum is the minimal accumulated value from the pressure sensors needed to write on the SD card
      if (dataFile) {
         // print to the serial port too:
         Serial.println(dataString);
