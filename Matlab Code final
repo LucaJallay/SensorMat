@@ -1,0 +1,54 @@
+clear all
+close all
+clc
+set_path
+
+data = importdata('text (1).txt',' '); %enter name of SD card file
+sitting = NaN(length(data(:, 1)),2);
+leaning_against = NaN(length(data(:, 1)),2);
+standing = NaN(length(data(:, 1)), 2);
+notworking = NaN(length(data(:, 1)), 2);
+i=1;
+l=0;
+
+while i<(length(data(:, 1))-1)
+    if ((data(i, 1) + data(i, 2) +  data(i, 4) + data(i, 5) + ...
+        data(i, 6) + data(i, 7)) >20)
+        sitting(i, 1) = 1;
+        sitting(i, 2) = data(i, 14);
+    elseif ((data(i, 8) + data(i, 9) + data(i, 10)+ data(i, 11) + ...
+        data(i, 12))>20)
+        leaning_against(i, 1) = 1;
+        leaning_against(i, 2) = data(i, 14);
+    else
+            if ((i>2) && (data(i, 13) == 1) && isnan(sitting(i-1, 1)) && ...
+                    isnan(leaning_against(i-1, 1)) )
+                if (data(i, 14)-(data(i-1, 14))) >120    
+        %threshold to differentiate between not working and standing is 120s
+                        while l<(data(i, 14)-(data(i-1, 14)))
+                        notworking(i-l, 1) = 1;
+                        notworking(i-l, 2) = data(i, 14)-l;
+                        l=l+1;
+                        end
+                else
+                        standing(i, 1) = 1;
+                    standing(i, 2) = data(i, 14);
+                end
+            end
+    end
+    i=i+1;
+end
+
+
+Words = {'Sitting'; 'Leaning against'; 'Standing'; 'Not working'};
+
+scatter(sitting(:, 2), sitting(:, 1),'x', 'b');
+set(gca,'ytick',(1:4),'yticklabel',Words, 'FontSize',20)
+hold on
+scatter(leaning_against(:, 2), 2*leaning_against(:, 1),'x', 'r');
+hold on
+scatter(standing(:, 2), 3*standing(:, 1),'x', 'g');
+scatter(notworking(:, 2), 4*notworking(:, 1),'x', 'c');
+hold on
+xlabel('Time in s');
+hold off
